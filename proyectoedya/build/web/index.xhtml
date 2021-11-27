@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Tabla Productos</title>
+    </h:head>
+    <h:body>
+        
+        
+        <h:form>
+            <p:commandButton value="Agregar Producto" actionListener="#{productosControl.limpiarProducto()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+            <p:separator/>
+        </h:form>
+        
+         <h:form id="formListado">
+             <p:dataTable id="tablaProductos" paginator="true" paginatorPosition="bottom" rows="10" var="Productos" value="#{productosControl.listaProductos}" emptyMessage="No existen Productos">
+                            <p:column headerText="ID Productos">
+                                <h:outputText value="#{Productos.id}" />
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{Productos.nombre}" />
+                            </p:column>
+                            
+                             <p:column headerText="Descripcion">
+                                 <h:outputText value="#{Productos.descripcion}" />
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{Productos.precio}" />
+                            </p:column>
+                            
+                            <p:column headerText="MODIFICAR" style="text-align: center">
+                                <p:commandButton icon="ui-icon-pencil" title="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                                    <f:setPropertyActionListener target="#{productosControl.producto}" value="#{Productos}"/>
+                                </p:commandButton>
+                            </p:column>
+                            <p:column headerText="ELIMINAR" style="text-align: center">
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                                    <f:setPropertyActionListener target="#{productosControl.producto}" value="#{Productos}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+        
+        
+        <h:form id="formAgregar">
+                        <p:dialog id="dlgAgregar" header="Agregar Producto" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                            <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                                 <p:outputLabel value="ID:"/>
+                                 <p:inputText value="#{productosControl.producto.id}"/>
+                                <p:outputLabel value="Nombre:"/>
+                                <p:inputText value="#{productosControl.producto.nombre}"/>
+                                <p:outputLabel value="Descripción:"/>
+                                <p:inputText value="#{productosControl.producto.descripcion}"/>
+                                <p:outputLabel value="Precio:"/>
+                                <p:inputText value="#{productosControl.producto.precio}"/>
+                            </p:panelGrid>
+                            <p:commandButton  value="Guardar" actionListener="#{productosControl.agregarProducto()}" update=":formListado:tablaProductos" oncomplete="PF('dialogoAgregar').hide();"/>
+                            <p:commandButton  value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+                        </p:dialog>
+                    </h:form>
+
+                    <h:form id="formModificar">
+                        <p:dialog id="dlgModificar" header="Modificar Producto" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                            <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                                <p:outputLabel value="Producto:"/>
+                                <p:inputText value="#{productosControl.producto.nombre}"/>
+                                
+                            </p:panelGrid>
+                            <p:commandButton  value="Guardar" actionListener="#{productosControl.modificarProducto()}" update=":formListado:tablaProductos" oncomplete="PF('dialogoModificar').hide();"/>
+                            <p:commandButton  value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+                        </p:dialog>
+                    </h:form>
+
+                    <h:form id="formEliminar">
+                        <p:dialog id="dlgEliminar" header="Eliminar Producto" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                            <h:outputText value="Desea eliminar este registro?"/>
+                            <p:commandButton  value="Si" actionListener="#{productosControl.eliminarProducto()}" update=":formListado:tablaProductos" oncomplete="PF('dialogoEliminar').hide();"/>
+                            <p:commandButton  value="No" onclick="PF('dialogoEliminar').hide();"/>
+                        </p:dialog>
+                    </h:form>
+        
+    </h:body>
+</html>
+
